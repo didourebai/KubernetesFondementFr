@@ -106,7 +106,12 @@ kubectl port-forward pod/nginx-pod 8080:80
 
 ## ⚙️ Atelier 2 : Déployer et exposer une application
 
-Créer un fichier `web-deploy.yaml` :
+### 🎯 Objectif  
+Déployer une application web Nginx avec un `Deployment` Kubernetes et l’exposer via un `Service` de type **NodePort** pour y accéder depuis le navigateur.
+
+---
+
+### 🧩 Étape 1 : Créer le fichier `web-deploy.yaml`
 
 ```yaml
 apiVersion: apps/v1
@@ -128,12 +133,91 @@ spec:
         image: nginx
         ports:
         - containerPort: 80
+
 ```
+
+### 🧩 Étape 2 : Créer le fichier `web-service.yaml`
+
+Ce fichier définit un **Service Kubernetes** de type `NodePort` qui permet d’exposer ton application Nginx en dehors du cluster.
+
+Crée un fichier nommé **web-service.yaml** et ajoute le contenu suivant :
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+spec:
+  type: NodePort
+  selector:
+    app: web
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30080
+
 Commandes à exécuter :
+
+➡️ Application accessible via: http://localhost:30080
+
+### Étape 3 : Appliquer les manifests
+
 ```bash
 kubectl apply -f web-deploy.yaml
 kubectl apply -f web-service.yaml
+```
+Vérifie que tout est bien créé :
+```bash
 kubectl get all
 ```
+Tu devrais voir :
 
-➡️ Application accessible via: http://localhost:30080
+- Un Deployment nommé web-deploy
+
+- Un ReplicaSet gérant 3 Pods
+
+- 3 Pods en statut Running
+
+- Un Service web-service exposant le port 30080
+### Étape 4 : Vérification et débogage
+## A) Pods et Service
+
+```bash
+kubectl get pods -l app=web -o wide
+kubectl get svc web-service -o wide
+kubectl get endpoints web-service
+```
+- Les Pods doivent être Running et Ready (1/1).
+
+- ENDPOINTS doit lister 3 adresses (si replicas: 3).
+
+- Si ENDPOINTS est vide, corriger les labels/selector puis :
+
+```bash
+kubectl rollout restart deployment/web-deploy
+kubectl get endpoints web-service
+```
+### Étape 5 : Accès au navigateur (si OK sinon port-forward)
+Ouvre : http://localhost:30080
+ou : http://kubernetes.docker.internal:30080
+Si l’accès NodePort ne répond pas sur ta machine (firewall/routage), utilise *port-forward* :
+```bash
+kubectl port-forward svc/web-service 30080:80
+```
+Puis ouvre : http://localhost:30080
+
+### 💡 Pourquoi ça marche toujours ?
+
+`kubectl port-forward` crée un **tunnel direct** entre ta machine et le **Service** via le **kube-apiserver**, sans dépendre du réseau, du `NodePort` ou du routage Docker.
+
+Cette commande établit une connexion sécurisée entre ton poste local et le cluster Kubernetes.  
+Ainsi, le trafic envoyé à `localhost` est redirigé directement vers le Pod ou le Service ciblé à l’intérieur du cluster.
+
+C’est la méthode la plus fiable pour **tester ou déboguer localement** une application, que tu sois sur :
+- 🐳 **Docker Desktop**
+- 🔹 **kind**
+- ☸️ **minikube**
+- 🌩️ ou même un **cluster distant**
+
+> ⚙️ En résumé : `port-forward` contourne les problèmes de réseau et de routage  
+> il t’assure un accès direct et immédiat à ton application dans le cluster Kubernetes.
