@@ -20,8 +20,7 @@ Kubernetes gère les configurations et les données de façon déclarative :
 - **PersistentVolume (PV)** : ressource de stockage fournie par un administrateur
 - **PersistentVolumeClaim (PVC)** : demande de stockage faite par un utilisateur
 - **StorageClass** : définit la manière dont les volumes sont provisionnés dynamiquement
-### ConfigMap – Configuration non sensible
-#### 🔍 Concept
+
 Un ConfigMap stocke des paires clé-valeur (ou fichiers) injectées dans les pods via variables d’environnement ou fichiers montés.
 # Atelier Kubernetes — ConfigMap, Secret, Volumes
 
