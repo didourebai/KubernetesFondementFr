@@ -14,3 +14,6 @@ Ce guide a pour objectif de vous accompagner pas à pas dans la découverte de *
 
 ---
 
+## Sommaire
+- [Introduction](https://github.com/didourebai/KubernetesFondementFr/blob/main/introduction.md)
+- [Configuration et stockage persistant](https://github.com/didourebai/KubernetesFondementFr/blob/main/configuration-stockage-persistant.md)
