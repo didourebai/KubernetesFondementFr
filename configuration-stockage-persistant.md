@@ -26,7 +26,17 @@ Un ConfigMap stocke des paires clé-valeur (ou fichiers) injectées dans les pod
 
 ## 1. Atelier 1 – Manipuler un ConfigMap
 
-Créez `configmap.yaml` (voir exemple dans le cours) puis appliquez-le :
+Créez `configmap.yaml` puis appliquez-le :
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  APP_ENV: "production"
+  APP_COLOR: "blue"
+  APP_MESSAGE: "Bonjour depuis un ConfigMap !"
+```
 
 ```bash
 kubectl apply -f configmap.yaml
