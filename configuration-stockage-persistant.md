@@ -73,7 +73,7 @@ kubectl get configmap app-config -o yaml
 Vérifiez les variables d'environnement dans le pod :
 
 ```bash
-kubectl exec -it demo-config -- env | grep APP_
+kubectl exec -it demo-config -- sh
 ```
 
 Résultat attendu : les variables d’environnement proviennent du ConfigMap sans rebuild d’image.
