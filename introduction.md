@@ -140,7 +140,7 @@ spec:
   - port: 80
     targetPort: 80
     nodePort: 30080
-
+```
 Commandes à exécuter :
 
 ➡️ Application accessible via: http://localhost:30080
