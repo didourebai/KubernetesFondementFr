@@ -37,6 +37,7 @@ data:
   APP_COLOR: "blue"
   APP_MESSAGE: "Bonjour depuis un ConfigMap !"
 ```
+Enregistrez-le sous configmap.yaml, puis appliquez-le :
 
 ```bash
 kubectl apply -f configmap.yaml
