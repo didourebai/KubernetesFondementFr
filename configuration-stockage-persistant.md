@@ -60,6 +60,15 @@ spec:
     - configMapRef:
         name: app-config
 ```
+Appliquer le ConfigMap
+```bash
+kubectl apply -f configmap.yaml
+```
+Vérifier son contenu
+
+```bash
+kubectl get configmap app-config -o yaml
+```
 
 Vérifiez les variables d'environnement dans le pod :
 
